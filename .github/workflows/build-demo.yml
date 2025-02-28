@@ -70,3 +70,12 @@ jobs:
     - uses: hadolint/hadolint-action@v3.1.0
       with:
         dockerfile: docker/Dockerfile
+  test_api:
+    name: Test image api
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Docker container
+        run: docker run -d -p 8080:80 --name nginx nginx
+      - name: test nginx
+        run: sleep 10 && curl http://127.0.0.1:8080
+      
