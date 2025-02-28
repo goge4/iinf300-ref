@@ -2,44 +2,13 @@ name: CI/CD
 
 on:
   push:
-    tags: ['*']
-
+    branches: ['main']
+    
 jobs:
-  lint_python:
-    name: Lint python code
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: write
-      attestations: write
-      id-token: write
-    steps:
-    - uses: actions/checkout@v4
-    - name: Python Linter
-      uses: sunnysid3up/python-linter@master
-      with:
-        source: "docker/app"
-        strict: "low"
-        mypy-options: "--ignore-missing-imports --show-error-codes"
-        pylint-options: "--rcfile=setup.cfg"
-        isort-options: "-w 100"
-  lint_docker:
-    name: Lint docker file code
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: write
-      attestations: write
-      id-token: write
-    steps:
-    - uses: actions/checkout@v4
-    - uses: hadolint/hadolint-action@v3.1.0
-      with:
-        dockerfile: docker/Dockerfile
   push_to_registries:
-    needs: [lint_docker, lint_python]
     name: Push Docker image to single registry
     runs-on: ubuntu-latest
+    needs: [lint_python, hadolint]
     permissions:
       packages: write
       contents: read
@@ -60,9 +29,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: harbor.kakor.ovh/ipi/correction
-          tags: ${{ github.ref_name }}
-
+          images: harbor.kakor.ovh/ipi/groupe-3
+          tags: toto 
+  
       - name: Build and push Docker images
         id: push
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -71,16 +40,43 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  test_api:
-    name: Test image api
+          
+  lint_python:
+    name: Lint Python Code
     runs-on: ubuntu-latest
-    needs: [push_to_registries]
     steps:
-      - name: Run the build process with Docker
-        uses: addnab/docker-run-action@v3
-        with:
-          image: harbor.kakor.ovh/ipi/correction:${{ github.ref_name }}
-          run: |
-            flask run --host 0.0.0.0
-            curl http://127.0.0.1:5000
+      - uses: actions/checkout@v4
+
+      - name: Install Black
+        run: pip install black
+
+      - name: Run Black to auto-format the code
+        run: black .
       
+      - name: Python Linter
+        uses: sunnysid3up/python-linter@master
+        with:
+            source: "docker/app"
+            mypy-options: "--ignore-missing-imports --show-error-codes"
+            isort-options: "-w 100"
+            pylint-options: "--disable=F0010"
+            
+  hadolint:
+    name: Hadolint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: docker/Dockerfile
+
+  test_curl:
+    name: On test !
+    runs-on: ubuntu-latest
+    needs: push_to_registries
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the build process with Docker
+        run: docker run -d -p 8080:5000 --name nginx harbor.kakor.ovh/ipi/groupe-3:toto
+      - name: test curl
+        run: sleep 10 && curl --header "Content-Type:application/json" http://localhost:5000/librairie/livres -d '{"titre":"DevSecOps DEAVSETS", "auteur":"Jordan Assouline"}'
