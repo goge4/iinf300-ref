@@ -76,8 +76,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [push_to_registries]
     steps:
-      - name: Run Docker container
-        run: docker run -d -p 5000:5000 --name python harbor.kakor.ovh/ipi/correction:${{ github.ref_name }}
-      - name: test nginx
-        run: sleep 10 && curl http://127.0.0.1:5000
+      - name: Run the build process with Docker
+        uses: addnab/docker-run-action@v3
+        with:
+          image: harbor.kakor.ovh/ipi/correction:${{ github.ref_name }}
+          run: |
+            curl http://127.0.0.1:5000
       
