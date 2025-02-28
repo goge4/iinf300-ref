@@ -1,0 +1,5 @@
+image:
+  repository: harbor.kakor.ovh/ipi/groupe-3
+  tag: "latest"
+
+replicaCount: 1
