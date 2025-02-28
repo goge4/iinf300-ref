@@ -19,7 +19,7 @@ En partant de l'exemple https://github.com/marketplace/actions/python-linter, me
 
 ## Exercice 3
 
-Mettez en place Hadolint via l'exemple du repo ci-dessous de la même manière que pour PEP8 : https://github.com/marketplace/actions/python-linter
+Mettez en place Hadolint via l'exemple du repo ci-dessous de la même manière que pour PEP8 : https://github.com/hadolint/hadolint-action
 
 ## Exercice 4 
 
