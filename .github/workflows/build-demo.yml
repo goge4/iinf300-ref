@@ -57,3 +57,16 @@ jobs:
         mypy-options: "--ignore-missing-imports --show-error-codes"
         pylint-options: "--rcfile=setup.cfg"
         isort-options: "-w 100"
+  lint_docker:
+    name: Lint python code
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+      attestations: write
+      id-token: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: docker/Dockerfile
