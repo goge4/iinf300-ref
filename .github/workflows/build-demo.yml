@@ -77,7 +77,7 @@ jobs:
     needs: [push_to_registries]
     steps:
       - name: Run Docker container
-        run: docker run -d -p 5000:5000 --name python harbor.kakor.ovh/ipi/correction:${{ github.ref#refs/tags }}
+        run: docker run -d -p 5000:5000 --name python harbor.kakor.ovh/ipi/correction:${{ github.ref#refs/tags/ }}
       - name: test nginx
         run: sleep 10 && curl http://127.0.0.1:5000
       
