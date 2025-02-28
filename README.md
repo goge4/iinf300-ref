@@ -21,9 +21,13 @@ En partant de l'exemple https://github.com/marketplace/actions/python-linter, me
 
 Mettez en place Hadolint via l'exemple du repo ci-dessous de la même manière que pour PEP8 : https://github.com/hadolint/hadolint-action
 
+## Exercice 3.bis
+
+En vous appuyant sur la documentatuion de github worflows, mettez en place un dépendance logique entre les jobs (les lint avant le build)
+
 ## Exercice 4 
 
-En partant de l'exemple fonctionnel du lien suivant https://aschmelyun.com/blog/using-docker-run-inside-of-github-actions/, testez l'image en vous assurant que vous pouvez créer un nouveau livre en utilisant la commande suivante : ```curl --header "Content-Type: application/json" http://localhost:5000/librairie/livres -d '{"titre": "DevSecOps DEAVSETS", "auteur": "Jordan Assouline"}' ```
+En partant de l'exemple fonctionnel du lien suivant https://aschmelyun.com/blog/using-docker-run-inside-of-github-actions/ (ou l'exmple commenté du job api-test), testez l'image en vous assurant que vous pouvez créer un nouveau livre en utilisant la commande suivante : ```curl --header "Content-Type: application/json" http://localhost:5000/librairie/livres -d '{"titre": "DevSecOps DEAVSETS", "auteur": "Jordan Assouline"}' ```
 
 ## Exercice 5
 
