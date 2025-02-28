@@ -81,5 +81,6 @@ jobs:
         with:
           image: harbor.kakor.ovh/ipi/correction:${{ github.ref_name }}
           run: |
+            flask run --host 0.0.0.0
             curl http://127.0.0.1:5000
       
